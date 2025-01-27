@@ -1,0 +1,59 @@
+<div class="search-container">
+    <input
+        type="text"
+        placeholder="Search for recipes..."
+        [(ngModel)]="keyword"
+        (keyup.enter)="searchRecipes()"
+    />
+    <button (click)="searchRecipes()">Search</button>
+</div>
+
+<div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+</div>
+
+<!-- Display search results if available -->
+<div class="grid-container" *ngIf="recipes.length > 0">
+    <a
+        *ngFor="let recipe of recipes"
+        [routerLink]="'/recipe/' + recipe.id"
+        class="grid-item"
+    >
+        <img [src]="recipe.image" alt="{{ recipe.name }}" />
+        <h3>{{ recipe.name }}</h3>
+        <p>{{ recipe.cuisine }}</p>
+    </a>
+</div>
+
+<!-- Display all recipes if no search is performed -->
+<div class="grid-container" *ngIf="recipes.length === 0">
+    <a
+        *ngFor="let recipe of allRecipes"
+        [routerLink]="'/recipe/' + recipe.id"
+        class="grid-item"
+    >
+        <img [src]="recipe.image" alt="{{ recipe.name }}" />
+        <h3>{{ recipe.name }}</h3>
+        <p>{{ recipe.cuisine }}</p>
+    </a>
+</div>
+
+<!-- Pagination Controls -->
+<div
+    class="pagination-controls"
+    *ngIf="totalPages > 1 && recipes.length === 0"
+>
+    <button
+        [disabled]="currentPage === 0"
+        (click)="changePage(currentPage - 1)"
+    >
+        Previous
+    </button>
+    <span>Page {{ currentPage + 1 }} of {{ totalPages }}</span>
+    <button
+        [disabled]="currentPage + 1 === totalPages"
+        (click)="changePage(currentPage + 1)"
+    >
+        Next
+    </button>
+</div>
